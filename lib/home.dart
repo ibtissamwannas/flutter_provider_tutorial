@@ -40,28 +40,31 @@ class _HomeState extends State<Home> {
             ),
             SizedBox(height: 20),
             Expanded(
-              child: ListView.builder(
-                itemCount: context.watch<ItemProvider>().size,
-                itemBuilder: (context, index) {
-                  final provider = context.watch<ItemProvider>();
-                  final item = provider.items[index];
+              child: Consumer<ItemProvider>(
+                builder: (context, myItems, child) {
+                  return ListView.builder(
+                    itemCount: myItems.size,
+                    itemBuilder: (context, index) {
+                      final item = myItems.items[index];
 
-                  return ListTile(
-                    leading: Checkbox(
-                      value: item.isCompleted,
-                      onChanged: (value) {
-                        final provider = context.read<ItemProvider>();
-                        provider.toggleItem(item);
-                      },
-                    ),
-                    title: Text(item.item),
-                    trailing: IconButton(
-                      onPressed: () {
-                        final provider = context.read<ItemProvider>();
-                        provider.deleteItem(item);
-                      },
-                      icon: Icon(Icons.delete, color: Colors.red),
-                    ),
+                      return ListTile(
+                        leading: Checkbox(
+                          value: item.isCompleted,
+                          onChanged: (value) {
+                            // final provider = context.read<ItemProvider>();
+                            myItems.toggleItem(item);
+                          },
+                        ),
+                        title: Text(item.item),
+                        trailing: IconButton(
+                          onPressed: () {
+                            // final provider = context.read<ItemProvider>();
+                            myItems.deleteItem(item);
+                          },
+                          icon: Icon(Icons.delete, color: Colors.red),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
